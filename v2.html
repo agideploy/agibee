@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AGI BEE- Jualan & Belanja Online</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            padding-bottom: 70px;
+        }
+        .header {
+            background: white;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo h1 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ee4d2d, #ff8c5a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            color: #ee4d2d;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #334155;
+        }
+        .nav-item.active {
+            background: #ee4d2d;
+            color: white;
+        }
+        .cart-badge {
+            background: #ee4d2d;
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+        .three-dots-wrapper {
+            position: relative;
+        }
+        .dots-btn {
+            background: #f1f5f9;
+            width: 42px;
+            height: 42px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            width: 220px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 200;
+            border: 1px solid #e2e8f0;
+        }
+        .dropdown-item {
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.1s;
+            border-radius: 16px;
+            margin: 4px 8px;
+        }
+        .dropdown-item:hover {
+            background: #fef3c7;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 24px auto;
+            padding: 0 24px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+        .product-img {
+            width: 100%;
+            height: 180px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 16px;
+        }
+        .product-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .product-price {
+            color: #ee4d2d;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        .product-stock {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin: 6px 0;
+        }
+        .btn-add {
+            background: #ee4d2d;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-delete {
+            background: #e2e8f0;
+            border: none;
+            width: 100%;
+            padding: 8px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .cart-items, .address-form, .sell-form, .profile-section, .orders-list {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .cart-img {
+            width: 60px;
+            height: 60px;
+            background: #f1f5f9;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .cart-detail {
+            flex: 1;
+        }
+        .cart-qty {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .qty-btn {
+            background: #e2e8f0;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-family: inherit;
+        }
+        .btn-checkout, .btn-save, .btn-sell {
+            background: #ee4d2d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .order-card {
+            background: #fef9e6;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #ee4d2d;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            z-index: 999;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #94a3b8;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        @media (max-width: 700px) {
+            .header-container { flex-direction: column; gap: 12px; }
+            .product-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-container">
+        <div class="logo">
+            <h1><i class="fas fa-store"></i>Agi BEE
+            <p>NEW APPS</p>
+        </div>
+        <div class="nav-menu">
+            <button class="nav-item" id="navHome"><i class="fas fa-home"></i> Beranda</button>
+            <button class="nav-item" id="navCart"><i class="fas fa-shopping-cart"></i> Keranjang <span id="cartCount" class="cart-badge">0</span></button>
+            <div class="three-dots-wrapper">
+                <button class="dots-btn" id="dotsBtn"><i class="fas fa-ellipsis-v"></i></button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-item" id="adminCsBtn"><i class="fab fa-whatsapp"></i> Admin CS (Agii kidott)</div>
+                    <div class="dropdown-item" id="jualanBtn"><i class="fas fa-plus-circle"></i> Jualan</div>
+                    <div class="dropdown-item" id="alamatBtn"><i class="fas fa-map-marker-alt"></i> Alamat Saya</div>
+                    <div class="dropdown-item" id="cekPesananBtn"><i class="fas fa-clipboard-list"></i> Cek Pesanan (untuk seller)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="mainContent"></div>
+<footer>© AGI SHOP - Jualan & Belanja • Data tersimpan di perangkat Anda</footer>
+
+<script>
+    // ======================== DATA ========================
+    let products = [];       // setiap produk punya seller: "AGI Official"
+    let cart = [];
+    let userAddress = { fullname: "", phone: "", address: "" };
+    let orders = [];         // semua pesanan dari pembeli
+    
+    // Seller tetap: hanya "AGI Official" yang punya toko ini.
+    // Dengan asumsi bahwa pemilik toko adalah "AGI Official", maka:
+    // - Produk yang dijual hanya milik seller ini.
+    // - Hapus produk hanya bisa dilakukan oleh seller ini.
+    // - Cek pesanan hanya menampilkan pesanan yang membeli produk dari seller ini.
+    const CURRENT_SELLER = "AGI Official";
+
+    // Load data dari localStorage
+    function loadData() {
+        const storedProducts = localStorage.getItem('agi_products');
+        if(storedProducts) {
+            products = JSON.parse(storedProducts);
+        } else {
+            // produk default dengan seller AGI Official
+            products = [
+                { id: 1, name: "Kaos Distro Premium", price: 89000, stock: 15, imageUrl: "https://picsum.photos/id/20/200/200", seller: CURRENT_SELLER },
+                { id: 2, name: "Jaket Hoodie Vintage", price: 179000, stock: 8, imageUrl: "https://picsum.photos/id/21/200/200", seller: CURRENT_SELLER },
+                { id: 3, name: "Sepatu Sneakers Pria", price: 349000, stock: 5, imageUrl: "https://picsum.photos/id/22/200/200", seller: CURRENT_SELLER },
+                { id: 4, name: "Tas Ransel Kanvas", price: 129000, stock: 12, imageUrl: "https://picsum.photos/id/23/200/200", seller: CURRENT_SELLER },
+                { id: 5, name: "Smartwatch Tahan Air", price: 459000, stock: 4, imageUrl: "https://picsum.photos/id/24/200/200", seller: CURRENT_SELLER },
+            ];
+        }
+        const storedCart = localStorage.getItem('agi_cart');
+        cart = storedCart ? JSON.parse(storedCart) : [];
+        const storedAddress = localStorage.getItem('agi_user_address');
+        if(storedAddress) userAddress = JSON.parse(storedAddress);
+        const storedOrders = localStorage.getItem('agi_orders');
+        orders = storedOrders ? JSON.parse(storedOrders) : [];
+        updateCartBadge();
+    }
+
+    function saveProducts() { localStorage.setItem('agi_products', JSON.stringify(products)); }
+    function saveCart() { localStorage.setItem('agi_cart', JSON.stringify(cart)); updateCartBadge(); }
+    function saveAddress() { localStorage.setItem('agi_user_address', JSON.stringify(userAddress)); }
+    function saveOrders() { localStorage.setItem('agi_orders', JSON.stringify(orders)); }
+
+    function updateCartBadge() {
+        const total = cart.reduce((sum, i) => sum + i.qty, 0);
+        const badge = document.getElementById('cartCount');
+        if(badge) badge.innerText = total;
+    }
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast');
+        if(existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    // ======================== FUNGSI PRODUK & KERANJANG ========================
+    function addToCart(productId) {
+        const product = products.find(p => p.id == productId);
+        if(!product) return;
+        const existing = cart.find(i => i.id == productId);
+        if(existing) {
+            if(existing.qty < product.stock) {
+                existing.qty++;
+                showToast(`✅ ${product.name} +1 (sisa stok: ${product.stock - existing.qty})`);
+            } else {
+                showToast(`⚠️ Stok ${product.name} habis!`);
+                return;
+            }
+        } else {
+            if(product.stock > 0) {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    qty: 1,
+                    imageUrl: product.imageUrl,
+                    seller: product.seller
+                });
+                showToast(`🛒 ${product.name} ditambahkan ke keranjang`);
+            } else {
+                showToast(`Stok habis!`);
+                return;
+            }
+        }
+        saveCart();
+        if(currentPage === 'cart') renderCart();
+    }
+
+    function updateCartQty(id, delta) {
+        const idx = cart.findIndex(i => i.id == id);
+        if(idx !== -1) {
+            const newQty = cart[idx].qty + delta;
+            const product = products.find(p => p.id == id);
+            if(newQty <= 0) {
+                cart.splice(idx,1);
+            } else if(product && newQty <= product.stock) {
+                cart[idx].qty = newQty;
+            } else {
+                showToast(`Maksimal stok ${product.stock}`);
+                return;
+            }
+            saveCart();
+            renderCart();
+        }
+    }
+
+    // Hapus produk: hanya bisa dilakukan oleh seller (dalam hal ini CURRENT_SELLER)
+    // Karena semua produk di toko ini adalah milik seller, maka hapus langsung dari daftar.
+    function deleteProduct(productId) {
+        const product = products.find(p => p.id == productId);
+        if(product && product.seller === CURRENT_SELLER) {
+            if(confirm(`Hapus produk "${product.name}" dari daftar jualan?`)) {
+                products = products.filter(p => p.id != productId);
+                // hapus juga dari keranjang jika ada
+                cart = cart.filter(c => c.id != productId);
+                saveProducts();
+                saveCart();
+                showToast(`Produk "${product.name}" berhasil dihapus.`);
+                if(currentPage === 'home') renderHome();
+                else if(currentPage === 'jualan') renderJualan();
+            }
+        } else {
+            showToast("Anda tidak memiliki izin untuk menghapus produk ini.");
+        }
+    }
+
+    // Tambah produk baru (untuk seller)
+    function addNewProduct(event) {
+        event.preventDefault();
+        const name = document.getElementById('prodName').value.trim();
+        const price = parseInt(document.getElementById('prodPrice').value);
+        const stock = parseInt(document.getElementById('prodStock').value);
+        let imageUrl = document.getElementById('prodImage').value.trim();
+        if(!imageUrl) imageUrl = "https://picsum.photos/id/1/200/200";
+        if(!name || isNaN(price) || isNaN(stock)) {
+            showToast("Isi semua data dengan benar!");
+            return;
+        }
+        const newId = Date.now();
+        products.push({
+            id: newId,
+            name: name,
+            price: price,
+            stock: stock,
+            imageUrl: imageUrl,
+            seller: CURRENT_SELLER
+        });
+        saveProducts();
+        document.getElementById('sellForm').reset();
+        showToast(`✨ Produk "${name}" berhasil ditambahkan ke toko!`);
+        if(currentPage === 'jualan') renderJualan();
+        else renderHome();
+    }
+
+    // ======================== CHECKOUT ========================
+    function checkoutOrder() {
+        if(cart.length === 0) {
+            showToast("Keranjang kosong!");
+            return;
+        }
+        if(!userAddress.fullname || !userAddress.phone || !userAddress.address) {
+            showToast("Harap isi alamat terlebih dahulu (menu titik tiga -> Alamat Saya)");
+            return;
+        }
+        const total = cart.reduce((s,i) => s + (i.price * i.qty), 0);
+        // Simpan pesanan
+        const newOrder = {
+            id: Date.now(),
+            customerName: userAddress.fullname,
+            phone: userAddress.phone,
+            address: userAddress.address,
+            items: cart.map(item => ({ 
+                name: item.name, 
+                qty: item.qty, 
+                price: item.price,
+                seller: item.seller 
+            })),
+            total: total,
+            date: new Date().toLocaleString('id-ID')
+        };
+        orders.unshift(newOrder);
+        saveOrders();
+        // Kurangi stok produk
+        for(let cartItem of cart) {
+            const prod = products.find(p => p.id == cartItem.id);
+            if(prod) {
+                prod.stock -= cartItem.qty;
+                if(prod.stock < 0) prod.stock = 0;
+            }
+        }
+        saveProducts();
+        cart = [];
+        saveCart();
+        showToast(`🎉 Pesanan berhasil! Total Rp ${total.toLocaleString()}. Terima kasih ${userAddress.fullname}`);
+        renderHome();
+    }
+
+    // ======================== RENDER HALAMAN ========================
+    let currentPage = 'home';
+
+    function renderHome() {
+        currentPage = 'home';
+        setActiveNav('home');
+        const html = `
+            <h2><i class="fas fa-fire"></i> Produk Unggulan (Toko AGI Official)</h2>
+            <div class="product-grid">
+                ${products.map(prod => `
+                    <div class="product-card">
+                        <div class="product-img"><img src="${prod.imageUrl}" onerror="this.src='https://picsum.photos/id/1/200/200'"></div>
+                        <div class="product-info">
+                            <div class="product-title">${prod.name}</div>
+                            <div class="product-price">Rp ${prod.price.toLocaleString()}</div>
+                            <div class="product-stock"><i class="fas fa-box"></i> Stok: ${prod.stock}</div>
+                            <button class="btn-add" onclick="addToCart(${prod.id})"><i class="fas fa-cart-shopping"></i> Beli</button>
+                            <button class="btn-delete" onclick="deleteProduct(${prod.id})"><i class="fas fa-trash-alt"></i> Hapus (jualan)</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            ${products.length === 0 ? '<div class="empty-state"><i class="fas fa-store-slash"></i> Belum ada produk, silakan tambah produk melalui menu Jualan</div>' : ''}
+        `;
+        document.getElementById('mainContent').innerHTML = html;
+    }
+
+    function renderCart() {
+        currentPage = 'cart';
+        setActiveNav('cart');
+        let cartHtml = `<div class="cart-items"><h3><i class="fas fa-shopping-bag"></i> Keranjang Belanja</h3>`;
+        if(cart.length === 0) {
+            cartHtml += `<div class="empty-state"><i class="fas fa-cart-shopping"></i> Keranjang kosong, yuk belanja!</div></div>`;
+        } else {
+            cart.forEach(item => {
+                cartHtml += `
+                    <div class="cart-item">
+                        <div class="cart-img"><img src="${item.imageUrl}" onerror="this.src='https://picsum.photos/id/1/60/60'"></div>
+                        <div class="cart-detail">
+                            <div><strong>${item.name}</strong></div>
+                            <div>Rp ${item.price.toLocaleString()}</div>
+                            <div class="cart-qty">
+                                <button class="qty-btn" onclick="updateCartQty(${item.id}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="qty-btn" onclick="updateCartQty(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div><strong>Rp ${(item.price * item.qty).toLocaleString()}</strong></div>
+                    </div>
+                `;
+            });
+            const total = cart.reduce((s,i)=> s + (i.price * i.qty),0);
+            cartHtml += `<div style="text-align:right; margin-top:16px;"><strong>Total: Rp ${total.toLocaleString()}</strong></div></div>`;
+            cartHtml += `
+                <div class="address-form">
+                    <h4><i class="fas fa-truck"></i> Alamat Pengiriman</h4>
+                    <p><strong>Nama:</strong> ${userAddress.fullname || "Belum diisi"} &nbsp;| <strong>No HP:</strong> ${userAddress.phone || "-"} </p>
+                    <p><strong>Alamat:</strong> ${userAddress.address || "Belum diisi"}</p>
+                    <button class="btn-checkout" onclick="checkoutOrder()"><i class="fas fa-check-circle"></i> Konfirmasi Pesanan</button>
+                </div>
+            `;
+        }
+        document.getElementById('mainContent').innerHTML = cartHtml;
+    }
+
+    function renderJualan() {
+        currentPage = 'jualan';
+        setActiveNav(null);
+        const html = `
+            <div class="sell-form">
+                <h3><i class="fas fa-plus-circle"></i> Tambah Produk Baru (Jualan)</h3>
+                <form id="sellForm">
+                    <input type="text" id="prodName" placeholder="Nama Produk" required>
+                    <input type="number" id="prodPrice" placeholder="Harga (contoh: 99000)" required>
+                    <input type="number" id="prodStock" placeholder="Stok" required>
+                    <input type="url" id="prodImage" placeholder="URL Gambar produk (contoh: https://...jpg)">
+                    <small style="color:#6c757d;">Kosongkan akan menggunakan gambar default</small>
+                    <button type="submit" class="btn-sell"><i class="fas fa-store"></i> Tambahkan Produk</button>
+                </form>
+            </div>
+            <h3><i class="fas fa-boxes"></i> Produk Jualan Saya (Toko AGI Official)</h3>
+            <div class="product-grid">
+                ${products.map(prod => `
+                    <div class="product-card">
+                        <div class="product-img"><img src="${prod.imageUrl}" onerror="this.src='https://picsum.photos/id/1/200/200'"></div>
+                        <div class="product-info">
+                            <div class="product-title">${prod.name}</div>
+                            <div class="product-price">Rp ${prod.price.toLocaleString()}</div>
+                            <div class="product-stock">Stok: ${prod.stock}</div>
+                            <button class="btn-delete" onclick="deleteProduct(${prod.id})"><i class="fas fa-trash-alt"></i> Hapus Produk</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            ${products.length === 0 ? '<div class="empty-state">Belum ada produk, klik tambah produk di atas</div>' : ''}
+        `;
+        document.getElementById('mainContent').innerHTML = html;
+        document.getElementById('sellForm')?.addEventListener('submit', addNewProduct);
+    }
+
+    function renderAlamat() {
+        currentPage = 'alamat';
+        setActiveNav(null);
+        const html = `
+            <div class="address-form">
+                <h3><i class="fas fa-map-marker-alt"></i> Alamat Pengiriman Saya</h3>
+                <input type="text" id="fullname" placeholder="Nama lengkap penerima" value="${userAddress.fullname.replace(/"/g, '&quot;')}">
+                <input type="tel" id="phone" placeholder="Nomor HP aktif" value="${userAddress.phone}">
+                <textarea id="address" rows="3" placeholder="Alamat lengkap (jalan, kota, kode pos)">${userAddress.address}</textarea>
+                <button class="btn-save" id="saveAddressBtn"><i class="fas fa-save"></i> Simpan Alamat</button>
+            </div>
+        `;
+        document.getElementById('mainContent').innerHTML = html;
+        document.getElementById('saveAddressBtn')?.addEventListener('click', () => {
+            userAddress.fullname = document.getElementById('fullname').value.trim();
+            userAddress.phone = document.getElementById('phone').value.trim();
+            userAddress.address = document.getElementById('address').value.trim();
+            saveAddress();
+            showToast("Alamat berhasil disimpan!");
+            renderAlamat();
+        });
+    }
+
+    // Cek pesanan: hanya menampilkan pesanan yang berisi produk dari CURRENT_SELLER
+    function renderCekPesanan() {
+        currentPage = 'orders';
+        setActiveNav(null);
+        // Filter pesanan yang mengandung setidaknya satu item dengan seller = CURRENT_SELLER
+        const filteredOrders = orders.filter(order => 
+            order.items.some(item => item.seller === CURRENT_SELLER)
+        );
+        if(filteredOrders.length === 0) {
+            document.getElementById('mainContent').innerHTML = `<div class="orders-list"><h3><i class="fas fa-clipboard-list"></i> Daftar Pesanan (Untuk Seller)</h3><div class="empty-state">Belum ada pesanan yang membeli produk dari toko Anda.</div></div>`;
+            return;
+        }
+        let html = `<div class="orders-list"><h3><i class="fas fa-clipboard-list"></i> Pesanan Masuk (Pembeli produk toko Anda)</h3>`;
+        filteredOrders.forEach(order => {
+            // Tampilkan hanya item yang seller-nya CURRENT_SELLER
+            const myItems = order.items.filter(item => item.seller === CURRENT_SELLER);
+            html += `
+                <div class="order-card">
+                    <div><i class="fas fa-user"></i> <strong>${order.customerName}</strong> | 📞 ${order.phone}</div>
+                    <div><i class="fas fa-map-pin"></i> ${order.address}</div>
+                    <div><i class="fas fa-calendar"></i> ${order.date}</div>
+                    <div><strong>Produk yang dibeli dari Anda:</strong> ${myItems.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
+                    <div><strong>Total pembayaran (untuk produk Anda):</strong> Rp ${myItems.reduce((sum,i)=> sum + (i.price * i.qty),0).toLocaleString()}</div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+        document.getElementById('mainContent').innerHTML = html;
+    }
+
+    function setActiveNav(activeId) {
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        if(activeId === 'home') document.getElementById('navHome').classList.add('active');
+        else if(activeId === 'cart') document.getElementById('navCart').classList.add('active');
+    }
+
+    // ======================== EVENT LISTENER ========================
+    document.getElementById('navHome').addEventListener('click', () => renderHome());
+    document.getElementById('navCart').addEventListener('click', () => renderCart());
+
+    const dotsBtn = document.getElementById('dotsBtn');
+    const dropdown = document.getElementById('dropdownMenu');
+    dotsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+    document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+
+    document.getElementById('adminCsBtn').addEventListener('click', () => {
+        window.open('https://wa.me/628123456789?text=Halo%20Admin%20AGI%20SHOP%2C%20saya%20butuh%20bantuan', '_blank');
+        dropdown.style.display = 'none';
+    });
+    document.getElementById('jualanBtn').addEventListener('click', () => { renderJualan(); dropdown.style.display = 'none'; });
+    document.getElementById('alamatBtn').addEventListener('click', () => { renderAlamat(); dropdown.style.display = 'none'; });
+    document.getElementById('cekPesananBtn').addEventListener('click', () => { renderCekPesanan(); dropdown.style.display = 'none'; });
+
+    // Inisialisasi
+    loadData();
+    renderHome();
+
+    // Expose global functions
+    window.addToCart = addToCart;
+    window.updateCartQty = updateCartQty;
+    window.deleteProduct = deleteProduct;
+    window.checkoutOrder = checkoutOrder;
+</script>
+</body>
+</html>
